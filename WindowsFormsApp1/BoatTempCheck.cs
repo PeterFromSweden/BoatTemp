@@ -24,6 +24,9 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ClearText();
+            Application.DoEvents();
+
             try
             {
                 float temp;
@@ -32,26 +35,32 @@ namespace WindowsFormsApp1
                 List<string> sensorPaths = new List<string>() {
                     @"/tmp/fineoffset.temperaturehumidity.135.tmp",
                     @"/tmp/fineoffset.temperaturehumidity.199.tmp",
-                    @"/tmp/mandolyn.temperaturehumidity.11.tmp"
+                    @"/tmp/mandolyn.temperaturehumidity.11.tmp",
+                    @"/tmp/fineoffset.temperaturehumidity.135.action.log",
+                    @"/tmp/fineoffset.temperaturehumidity.135.2.action.log",
+                    @"/tmp/fineoffset.temperaturehumidity.135.3.action.log",
                 };
                 //string tempStr = "-2.6°	68%     	                    	                    	2018-11-26 15:39:54";
 
-                sensorStrings = sshAttempt(sensorPaths);
-                parseSensor(sensorStrings[0], out temp, out hygroPerc);
+                sensorStrings = SshAttempt(sensorPaths);
+                ParseSensor(sensorStrings[0], out temp, out hygroPerc);
                 aGauge1.Value = temp;
                 txtTmpBoat.Text = temp.ToString();
                 txtHygBoat.Text = hygroPerc + "%";
 
-                parseSensor(sensorStrings[1], out temp, out hygroPerc);
+                ParseSensor(sensorStrings[1], out temp, out hygroPerc);
                 aGauge2.Value = temp;
                 txtTmpShed.Text = temp.ToString();
                 txtHy1Shed.Text = hygroPerc + "%";
 
-                parseSensor(sensorStrings[2], out temp, out hygroPerc);
+                ParseSensor(sensorStrings[2], out temp, out hygroPerc);
                 aGauge3.Value = temp;
                 txtHeatBox.Text = temp.ToString();
                 txtHy2Shed.Text = hygroPerc + "%";
 
+                textBox1.Text = Tail(sensorStrings[3]);
+                textBox2.Text = Tail(sensorStrings[4]);
+                textBox3.Text = Tail(sensorStrings[5]);
                 //timer1.Enabled = true;
             }
 
@@ -62,7 +71,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void parseSensor(string sensorString, out float temp, out float hygroPerc)
+        private void ParseSensor(string sensorString, out float temp, out float hygroPerc)
         {
             //temp = 0.0F;
             //hygroPerc = 0.0F;
@@ -79,7 +88,29 @@ namespace WindowsFormsApp1
             float.TryParse(hygroStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out hygroPerc);
         }
 
-        private List<string> sshAttempt(List<string> sensorPaths)
+        private string Tail(string inputStr)
+        {
+            var reader = new StringReader(inputStr);
+            string[] cacheOfThree = new string[3];
+            int ix = 0;
+            string line = reader.ReadLine();
+            while (line != null)
+            {
+                cacheOfThree[ix] = line;
+                ix = (ix + 1) % 3; // Next
+                line = reader.ReadLine();
+            }
+            string res = "";
+            // ix is at oldest already
+            res += cacheOfThree[ix] + Environment.NewLine;
+            ix = (ix + 1) % 3; // Next
+            res += cacheOfThree[ix] + Environment.NewLine;
+            ix = (ix + 1) % 3; // Next
+            res += cacheOfThree[ix] + Environment.NewLine;
+            return res;
+        }
+
+        private List<string> SshAttempt(List<string> sensorPaths)
         {
             List<string> res = new List<string>();
 
@@ -120,6 +151,24 @@ namespace WindowsFormsApp1
                 Settings.Default.opensshppk = openFileDialog1.FileName;
                 Settings.Default.Save();
             }
+        }
+
+        private void BoatTempCheck_Load(object sender, EventArgs e)
+        {
+            ClearText();
+        }
+
+        private void ClearText()
+        {
+            txtTmpBoat.Text = "";
+            txtHygBoat.Text = "";
+            txtTmpShed.Text = "";
+            txtHy1Shed.Text = "";
+            txtHeatBox.Text = "";
+            txtHy2Shed.Text = "";
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
         }
 
     }
