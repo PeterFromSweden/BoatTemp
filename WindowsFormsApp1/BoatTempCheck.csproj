@@ -51,10 +51,10 @@
     <ApplicationIcon>Icon1.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>F3D21858F8EFF8618F192667A38F1E3526B8B9BE</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>478424A78097C093F4E40CD838C5266423613220</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>BoatTempCheck_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>BoatTempCheck_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -104,6 +104,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="BoatTempCheck_1_TemporaryKey.pfx" />
     <None Include="BoatTempCheck_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
