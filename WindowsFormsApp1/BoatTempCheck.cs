@@ -12,6 +12,7 @@ using Renci.SshNet.Common;
 using Renci.SshNet;
 using System.IO;
 using BoatTempCheck.Properties;
+using System.Diagnostics;
 
 namespace WindowsFormsApp1
 {
@@ -170,6 +171,5 @@ namespace WindowsFormsApp1
             textBox2.Text = "";
             textBox3.Text = "";
         }
-
     }
 }
